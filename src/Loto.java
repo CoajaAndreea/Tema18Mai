@@ -1,4 +1,6 @@
+import java.util.LinkedHashSet;
 import java.util.Random;
+import java.util.Set;
 
 public class Loto {
     static final int MAX=6;
@@ -8,8 +10,8 @@ public class Loto {
         int contor=1;
 
         //generare bilete
-        int[] biletAgentie=generate6Numbers();
-        int[] biletulMeu=generate6Numbers();
+        Set<Integer> biletAgentie=generate6Numbers();
+        Set<Integer> biletulMeu=generate6Numbers();
 
         //afisare bilete
         printTicket(biletAgentie);
@@ -18,7 +20,7 @@ public class Loto {
         //cate numere sunt egale
         int egale=compareTickets(biletAgentie, biletulMeu);
 
-        while(egale<4) {
+        while(egale<6) {
             biletulMeu=generate6Numbers();
             contor++;
             System.out.println(contor);
@@ -31,35 +33,31 @@ public class Loto {
         printTicket(biletulMeu);
     }
 
-    public static int[] generate6Numbers() {
-        int[] winnerNumbers=new int[6];
+    public static Set generate6Numbers() {
+        Set<Integer> winnerNumbers= new LinkedHashSet<Integer>();
+//        int[] winnerNumbers=new int[6];
         int i=0;
 
         while(i<MAX) {
-            winnerNumbers[i]=new Random().nextInt(49)+1;
-            for (int j=0;j<MAX;j++) {
-                while (winnerNumbers[i]==winnerNumbers[j] && i!=j)
-                    winnerNumbers[i]=new Random().nextInt(49)+1;
-            }
+            winnerNumbers.add(new Random().nextInt(49)+1);
             i++;
         }
 
         return winnerNumbers;
     }
 
-    public static int compareTickets (int[] agencyTicket, int[] myTicket) {
+    public static int compareTickets (Set<Integer> agencyTicket, Set<Integer> myTicket) {
         int ok=0;
-        for (int i=0;i<MAX;i++)
-            for (int j=0;j<MAX;j++)
-                if (myTicket[i]==agencyTicket[j])
+        for (Integer x : agencyTicket)
+            for (Integer y : myTicket)
+                if (x.equals(y))
                     ok++;
         return ok;
     }
 
-    public static void printTicket(int[] ticket) {
-        for (int i=0;i<MAX;i++) {
-            System.out.print(ticket[i]+" ");
-        }
+    public static void printTicket(Set<Integer> ticket) {
+            System.out.print(ticket);
+
         System.out.println();
     }
 }
